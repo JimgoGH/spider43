@@ -6,7 +6,9 @@ const DAY_LONG = 24 * 3600 * 1000;
 class Site {
   url = '';
   nick = '';
-  landFail = true;
+  landFail = false;
+  pageIndex = 0;
+  pageElements = [];
 
   constructor(browser) {
     this.browser = browser;
@@ -18,11 +20,13 @@ class Site {
   async init() {
     console.log('new Page');
     this.page = await this.browser.newPage();
-    await this.page.setViewport({width: 1024, height: 880});
+    await this.page.emulateMedia('screen');
+    await this.page.setViewport({ width: 1024, height: 880 });
     await this.page.setUserAgent(userAgent);
 
     this.page.on('requestfailed', request => {
-      console.log('requesing ' + this.url, request.headers());
+      console.log('requesing ' + this.url + ' failed .');
+      console.dir(request.headers());
     })
 
     try {
@@ -43,7 +47,7 @@ class Site {
     try {
       fs.accessSync(path, fs.constants.W_OK);
     } catch (error) {
-      console.log('mkdir' + path);
+      console.log('mkdir: ' + path);
       fs.mkdirSync(path, { recursive: true });
     }
     return path;
@@ -54,7 +58,7 @@ class Site {
     if (!this.pngPath) {
       this.pngPath = await this.initPath('pngs');
     }
-    await this.page.screenshot({ 'path': `${this.pngPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.png` });
+    await this.page.screenshot({ 'path': `${this.pngPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.png`, 'fullPage': true });
   }
 
   async pdf() {
@@ -62,12 +66,20 @@ class Site {
     if (!this.pdfPath) {
       this.pdfPath = await this.initPath('pdfs');
     }
-    await this.page.pdf({ 'path': `${this.pdfPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.pdf` });
+    await this.page.pdf({ 'path': `${this.pdfPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.pdf`, 'format': 'A4' });
   }
 
   async close() {
     return await this.page.close();
   }
+
+  async doSearch() { }
+  async timeDesc() { }
+  async hasNext() { return false; }
+  async nextPage() { }
+  async logElements() { }
+  
+  async saveHtml() { }
 }
 
 module.exports = Site;

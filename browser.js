@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const consts = require('./consts.js');
 
 module.exports.Browser = async () => {
