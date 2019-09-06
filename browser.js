@@ -5,7 +5,7 @@ module.exports.Browser = async () => {
   console.log('new Browser');
   return await puppeteer.launch({
     executablePath: consts.CHROME_PATH,
-    headless: true,
+    headless: false,
     // devtools: true,
   });
 }

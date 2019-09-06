@@ -4,6 +4,7 @@ const Browser = require('./browser.js').Browser;
 
 const Baidu_Com = require("./sites/baidu.com.class");
 const Tieba_Baidu = require("./sites/teiba.baidu.com.class");
+const CONSTS = require('./consts.js');
 
 const siteClass = [Baidu_Com, Tieba_Baidu];
 
@@ -18,24 +19,33 @@ const siteClass = [Baidu_Com, Tieba_Baidu];
 
       try {
         await page.init();
-        if (page.landFail) continue;
-        
-        for (let i = 0; i < 5; i++) {
-          try {
-            await page.doSearch();
-            await page.hasNext();
-            await page.nextPage();
-            await page.logElements();
-            // await page.screenshot();
-            // Error: Protocol error (IO.read)
-            // await page.pdf();
-          } catch (error) {
-            console.error('error in Next Page loop', error)
+
+        for (const kw of CONSTS.KEY_WORDS) {
+          await page.gotoIndex();
+          if (page.landFail) continue;
+
+          await page.doSearch(kw);
+
+          for (let i = 0; i < CONSTS.MAX_PAGES; i++) {
+            try {
+              await page.findNext();
+              if (!page.hasNext) break;
+              await page.nextPage();
+              await page.logElements();
+              // await page.screenshot();
+              // Error: Protocol error (IO.read)
+              // await page.pdf();
+            } catch (error) {
+              console.error('error in Next Page loop', error);
+              continue;
+            }
           }
+
         }
+
         await page.close();
       } catch (error) {
-        console.error(error)
+        console.error(error);
         continue;
       }
     }

@@ -9,6 +9,7 @@ class Site {
   landFail = false;
   pageIndex = 0;
   pageElements = [];
+  hasNext = false;
 
   constructor(browser) {
     this.browser = browser;
@@ -25,17 +26,9 @@ class Site {
     await this.page.setUserAgent(userAgent);
 
     this.page.on('requestfailed', request => {
-      console.log('requesing ' + this.url + ' failed .');
-      console.dir(request.headers());
+      console.log('requesing ' + request.url().substr(0, 50) + ' failed');
+      // console.dir(request.headers());
     })
-
-    try {
-      console.log('goto ' + this.url);
-      await this.page.goto(this.url, { waitUntil: "networkidle2" });
-    } catch (err) {
-      console.error(err);
-      this.landFail = true;
-    }
   }
 
   async initPath(root) {
@@ -73,12 +66,35 @@ class Site {
     return await this.page.close();
   }
 
+  async gotoIndex() {
+    try {
+      console.log('goto ' + this.url);
+      await this.page.goto(this.url, { waitUntil: "networkidle2" });
+    } catch (err) {
+      console.error(err);
+      this.landFail = true;
+    }
+  }
+
   async doSearch() { }
   async timeDesc() { }
-  async hasNext() { return false; }
-  async nextPage() { }
+
+  async findNext() {
+    // await this.page.waitForNavigation({'waitUntil':'networkidle2'});
+    // await this.page.waitForSelector(this.nextSelector,{'waitUntil':'networkidle2'});
+    const nextBtn = await this.page.$(this.nextSelector);
+    this.hasNext = !!nextBtn;
+    if (!this.hasNext) console.log(`${this.nick} Page End`);
+  }
+
+  async nextPage() {
+    await this.page.click(this.nextSelector);
+    this.pageIndex++;
+    console.log(`${this.nick} Page : ${this.pageIndex}`);
+  }
+
   async logElements() { }
-  
+
   async saveHtml() { }
 }
 
