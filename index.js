@@ -41,6 +41,8 @@ const siteClass = [Baidu_Com, Tieba_Baidu];
             }
           }
 
+          await page.saveJson();
+
         }
 
         await page.close();
