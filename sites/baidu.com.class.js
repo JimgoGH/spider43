@@ -19,8 +19,8 @@ class Baidu_Com extends Site {
       let log = {};
       log.innerText = elm.innerText;
       let link = elm.querySelector('h3.t a');
-      log.title = link.textcontent;
       log.href = link.href;
+      log.title = link.text;
       return log;
     }));
 

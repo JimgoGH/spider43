@@ -51,7 +51,10 @@ class Site {
     if (!this.pngPath) {
       this.pngPath = await this.initPath('pngs');
     }
-    await this.page.screenshot({ 'path': `${this.pngPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.png`, 'fullPage': true });
+
+    const p0 = `${this.pngPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.png`;
+    await this.page.screenshot({ 'path': p0, 'fullPage': true });
+    return p0;
   }
 
   async pdf() {
@@ -59,7 +62,10 @@ class Site {
     if (!this.pdfPath) {
       this.pdfPath = await this.initPath('pdfs');
     }
-    await this.page.pdf({ 'path': `${this.pdfPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.pdf`, 'format': 'A4' });
+
+    const p0 = `${this.pdfPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.pdf`;
+    await this.page.pdf({ 'path': p0, 'format': 'A4' });
+    return p0;
   }
 
   async close() {
@@ -95,7 +101,47 @@ class Site {
 
   async logElements() { }
 
-  async saveHtml() { }
+  async saveHtml() {
+    console.log('Save htmls', this.url);
+    if (!this.htmlPath) {
+      this.htmlPath = await this.initPath('htmls');
+    }
+
+    const p0 = `${this.htmlPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.html`;
+
+    const ws = fs.createWriteStream(p0, { encoding: 'utf8' });
+
+    ws.on('error', err => console.error(err.stack));
+
+    // 使用 utf8 编码写入数据
+    ws.write('data');
+
+    // 标记文件末尾
+    ws.end();
+
+    return p0;
+  }
+
+  async saveJson() {
+    console.log('Save Jsons', this.url);
+    if (!this.jsonPath) {
+      this.jsonPath = await this.initPath('jsons');
+    }
+
+    const p0 = `${this.jsonPath}/${new Date().toLocaleTimeString().replace(/:/g, '_')}.json`;
+
+    const ws = fs.createWriteStream(p0, { encoding: 'utf8' });
+
+    ws.on('error', err => console.error(err.stack));
+
+    // 使用 utf8 编码写入数据
+    ws.write(JSON.stringify(this.pageElements));
+
+    // 标记文件末尾
+    ws.end();
+
+    return p0;
+  }
 }
 
 module.exports = Site;
