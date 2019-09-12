@@ -4,7 +4,7 @@
   "description": "4h3c spider",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test.js",
     "dev": "node inspect index.js"
   },
   "author": "Jimgo",

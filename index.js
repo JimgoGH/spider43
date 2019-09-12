@@ -1,6 +1,7 @@
 // const puppeteer = require('puppeteer');
 
 const Browser = require('./browser.js').Browser;
+const refreshJsons = require('./directory.js').refreshJsons;
 
 const Baidu_Com = require("./sites/baidu.com.class");
 const Tieba_Baidu = require("./sites/teiba.baidu.com.class");
@@ -41,7 +42,8 @@ const siteClass = [Baidu_Com, Tieba_Baidu];
             }
           }
 
-          await page.saveJson();
+          // await page.saveJson();
+          await page.savePageJsons();
 
         }
 
@@ -55,6 +57,10 @@ const siteClass = [Baidu_Com, Tieba_Baidu];
     await browser.close();
 
     console.log('browser has been closed');
+
+    refreshJsons();
+
+    console.log('Directory has already refreshed.');
 
   } catch (err) {
     console.error(err);

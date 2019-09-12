@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>采集页面</title>
+</head>
+<body>
+    <a href="./index.html">返回</a>
+    <div id="app">
+      
+    </div>
+</body>
+
+<script src="https://cdn.staticfile.org/vue/2.6.10/vue.js"></script>
+<script src="./getJSON.js"></script>
+
+<script type="text/javascript">
+  const APP = new Vue({
+    el: '#app',
+    data: {
+      dateList: [],
+    },
+    async created() {
+      this.dateList = await getJson('../jsons/directory.json');
+    },
+  });
+</script>
+
+</html>

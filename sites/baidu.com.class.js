@@ -3,18 +3,18 @@ const Site = require('./site.class');
 class Baidu_Com extends Site {
   url = 'https://www.baidu.com';
   nick = 'baidu.com';
-  nextSelector = '#page > a.n';
+  nextSelector = '#page > a.n:last-child';
 
   async doSearch(keyWord) {
     await this.page.type('#kw', keyWord);
-    await this.page.waitFor(10000);
+    await this.page.waitFor(3000);
     await this.page.click('#su');
   }
 
   async logElements() {
     console.log(`Log Elements ${this.nick} Page ${this.pageIndex}`);
-    
-    const targetList = await this.page.$$eval('.c-container', elms => elms.map(elm => {
+
+    const items = await this.page.$$eval('.c-container', elms => elms.map(elm => {
       console.log('Log Baidu.com Elements', elm);
       let log = {};
       log.innerText = elm.innerText;
@@ -24,9 +24,12 @@ class Baidu_Com extends Site {
       return log;
     }));
 
-    console.log('Elements has been Logged', targetList);
+    console.log('Elements has been Logged', items);
 
-    this.pageElements[this.pageIndex] = targetList;
+    // log page image
+    const img = await this.screenshot();
+
+    this.pageElements[this.pageIndex] = { items, img };
   }
 }
 

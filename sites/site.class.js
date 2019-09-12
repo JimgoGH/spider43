@@ -99,6 +99,7 @@ class Site {
     console.log(`${this.nick} Page : ${this.pageIndex}`);
   }
 
+  // log page imformations
   async logElements() { }
 
   async saveHtml() {
@@ -122,6 +123,7 @@ class Site {
     return p0;
   }
 
+  // @Deprecated
   async saveJson() {
     console.log('Save Jsons', this.url);
     if (!this.jsonPath) {
@@ -141,6 +143,34 @@ class Site {
     ws.end();
 
     return p0;
+  }
+
+  /**
+   * NOTICE: It will ReWrite All jsons, not Append
+   */
+  async savePageJsons() {
+    console.log('Save Jsons', this.url);
+    if (!this.jsonPath) {
+      this.jsonPath = await this.initPath('jsons');
+    }
+
+    let ws;
+
+    this.pageElements.forEach((elm,idx)=>{
+
+      if(!elm) return null;
+
+      ws = fs.createWriteStream(`${this.jsonPath}/${idx}.json`, { flags:'w', encoding: 'utf8' });
+
+      ws.on('error', err => console.error(err.stack));
+
+      // 使用 utf8 编码写入数据
+      ws.write(JSON.stringify(elm));
+
+      // 标记文件末尾
+      ws.end();
+    });
+
   }
 }
 

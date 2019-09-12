@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>采集目录</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- <date-directory></date-directory> -->
+    <ul>
+      <li v-for="dt in dateList" :key="dt">
+        <a href="#">{{dt}}</a>
+      </li>
+    </ul>
+  </div>
+</body>
+
+
+<script src="https://cdn.staticfile.org/vue/2.6.10/vue.js"></script>
+<script src="./getJSON.js" ></script>
+<!-- 
+<script type="text/template" id="date_directory">
+  <div>
+    <h1>date directory</h1>
+  </div>
+</script> 
+-->
+
+<script type="text/javascript">
+  // Vue.component('date-directory', { template: '#date_directory' });
+  const APP =  new Vue({
+    el: '#app',
+    data:{
+      dateList:[],
+    },
+    async created (){
+      this.dateList = await getJson('../directory.json');
+    },
+  });
+</script>
+
+</html>
