@@ -5,4 +5,5 @@ pngs/*
 jsons/*
 htmls/*
 *.rar
+directory.json
 package-lock.json

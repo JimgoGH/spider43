@@ -1,16 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>采集页面</title>
+  <title>采集结果</title>
+
+  <style>
+    #main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    #main>img {
+      display: block;
+      max-width: 480px;
+      height: auto;
+    }
+    #items {
+      margin: 10px;
+    }
+    #items > li{
+      list-style: none;
+    }
+    a.title-link {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+  </style>
 </head>
+
 <body>
-    <a href="./index.html">返回</a>
-    <div id="app">
-      
-    </div>
+  <div id="app">
+    <template v-if="pageInfo">
+      <div id="main">
+        <img :src="'../'+pageInfo.img">
+        <ul id="items">
+          <li v-for="it in pageInfo.items" :key="it.href">
+            <a class="title-link" :href="it.href" target="_blank">{{it.title}}</a>
+            <p>{{it.innerText}}</p>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <template v-else>
+      正在加载
+    </template>
+  </div>
 </body>
 
 <script src="https://cdn.staticfile.org/vue/2.6.10/vue.js"></script>
@@ -20,10 +59,24 @@
   const APP = new Vue({
     el: '#app',
     data: {
-      dateList: [],
+      pageInfo: null,
     },
     async created() {
-      this.dateList = await getJson('../jsons/directory.json');
+      const url = new URL(window.location);
+      const params = new URLSearchParams(url.search);
+
+      const date = params.get('dt');
+      const site = params.get('st');
+      const page = params.get('p');
+
+      if (!date || !site || !page) {
+        console.error('lost params.');
+        return false;
+      }
+
+      this.pageInfo = await getJson(`../jsons/${date}/${site}/${page}.json`);
+
+      console.log('Page Info : ', this.pageInfo);
     },
   });
 </script>

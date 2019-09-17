@@ -4,7 +4,8 @@ const getJson = async url => {
       headers: {
         'content-type': 'application/json'
       },
-      method: 'GET'
+      method: 'GET',
+      cache: 'reload'
     });
     return await respone.json();
   } catch (err) {

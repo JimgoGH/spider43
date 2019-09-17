@@ -12,16 +12,25 @@
   <div id="app">
     <!-- <date-directory></date-directory> -->
     <ul>
-      <li v-for="dt in dateList" :key="dt">
-        <a href="#">{{dt}}</a>
+      <li v-for="dt in dateList" :key="dt.date">
+        <ul>
+          <p>{{dt.date}}</p>
+          <li v-for="st in dt.sites" :key="st.name">
+            <ul>
+              <p>{{st.name}}</p>
+              <li v-for="p in st.pages" :key="p">
+                <a :href="pageHref(dt.date,st.name,p)">{{p}}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
 </body>
 
-
 <script src="https://cdn.staticfile.org/vue/2.6.10/vue.js"></script>
-<script src="./getJSON.js" ></script>
+<script src="./getJSON.js"></script>
 <!-- 
 <script type="text/template" id="date_directory">
   <div>
@@ -32,14 +41,19 @@
 
 <script type="text/javascript">
   // Vue.component('date-directory', { template: '#date_directory' });
-  const APP =  new Vue({
+  const APP = new Vue({
     el: '#app',
-    data:{
-      dateList:[],
+    data: {
+      dateList: [],
     },
-    async created (){
+    async created() {
       this.dateList = await getJson('../directory.json');
     },
+    methods: {
+      pageHref(date, site, page) {
+        return `./page.html?dt=${date}&st=${site}&p=${page}`
+      }
+    }
   });
 </script>
 
