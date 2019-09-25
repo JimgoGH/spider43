@@ -7,6 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>采集结果</title>
 
+  <link rel="stylesheet" href="https://cdn.staticfile.org/zui/1.9.1/css/zui.min.css">
+
   <style>
     #main {
       display: flex;
@@ -20,12 +22,15 @@
       max-width: 480px;
       height: auto;
     }
+
     #items {
       margin: 10px;
     }
-    #items > li{
+
+    #items>li {
       list-style: none;
     }
+
     a.title-link {
       font-size: 18px;
       line-height: 1.6;
@@ -37,7 +42,8 @@
   <div id="app">
     <template v-if="pageInfo">
       <div id="main">
-        <img :src="'../'+pageInfo.img">
+
+        <img :src="'../'+pageInfo.img" onclick="showBigImg(this)">
         <ul id="items">
           <li v-for="it in pageInfo.items" :key="it.href">
             <a class="title-link" :href="it.href" target="_blank">{{it.title}}</a>
@@ -53,8 +59,17 @@
 </body>
 
 <script src="https://cdn.staticfile.org/vue/2.6.10/vue.js"></script>
-<script src="./getJSON.js"></script>
 
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/zui/1.9.1/js/zui.min.js"></script>
+
+<script src="./getJSON.js"></script>
+<script>
+  const showBigImg = img => {
+    console.log('Img', img.src);
+
+  } 
+</script>
 <script type="text/javascript">
   const APP = new Vue({
     el: '#app',

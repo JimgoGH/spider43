@@ -4,11 +4,13 @@ class Baidu_Com extends Site {
   url = 'https://www.baidu.com';
   nick = 'baidu.com';
   nextSelector = '#page > a.n:last-child';
+  searchUrl = 'https://www.baidu.com/s?ie=utf-8&wd=##KEYWORD##&gpc=stf%3D1568690738%2C1569295538|stftype%3D1'
 
   async doSearch(keyWord) {
-    await this.page.type('#kw', keyWord);
-    await this.page.waitFor(3000);
-    await this.page.click('#su');
+    // await this.page.type('#kw', keyWord);
+    // await this.page.waitFor(3000);
+    // await this.page.click('#su');
+    return await this.directSearch(keyWord);
   }
 
   async logElements() {
@@ -24,7 +26,7 @@ class Baidu_Com extends Site {
       return log;
     }));
 
-    console.log('Elements has been Logged', items);
+    // console.log('Elements has been Logged', items);
 
     // log page image
     const img = await this.screenshot();

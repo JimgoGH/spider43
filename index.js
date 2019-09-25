@@ -5,9 +5,11 @@ const refreshJsons = require('./directory.js').refreshJsons;
 
 const Baidu_Com = require("./sites/baidu.com.class");
 const Tieba_Baidu = require("./sites/teiba.baidu.com.class");
+const Sogou_Com = require("./sites/sogou.com.class");
+const Weixin_Sogou = require("./sites/weixin.sogou.com.class");
 const CONSTS = require('./consts.js');
 
-const siteClass = [Baidu_Com, Tieba_Baidu];
+const siteClass = [Weixin_Sogou];
 
 (async () => {
 
@@ -28,11 +30,15 @@ const siteClass = [Baidu_Com, Tieba_Baidu];
           await page.doSearch(kw);
 
           for (let i = 0; i < CONSTS.MAX_PAGES; i++) {
+
             try {
+              // waite next button before log
               await page.findNext();
-              if (!page.hasNext) break;
-              await page.nextPage();
+              // log page elements
               await page.logElements();
+              if (!page.hasNext) break;
+              // goto next page
+              await page.nextPage();
               // await page.screenshot();
               // Error: Protocol error (IO.read)
               // await page.pdf();

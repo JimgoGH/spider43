@@ -2,12 +2,15 @@ const fs = require('fs');
 const userAgent = require('../consts.js').CHROME_USER_AGENT;
 
 const DAY_LONG = 24 * 3600 * 1000;
+const KEYWORD_REGEXP = /##KEYWORD##/;
+const NEXT_GAP = 1000;
 
 class Site {
   url = '';
+  searchUrl = '';
   nick = '';
   landFail = false;
-  pageIndex = 0;
+  pageIndex = 1;
   pageElements = [];
   hasNext = false;
 
@@ -82,14 +85,28 @@ class Site {
     }
   }
 
+  async directSearch(keyWord) {
+    try {
+      console.log('search By goto ' + this.searchUrl + '; ##KEYWORD## :' + keyWord);
+      await this.page.goto(this.searchUrl.replace(KEYWORD_REGEXP, keyWord), { waitUntil: "networkidle2" });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async doSearch() { }
   async timeDesc() { }
 
   async findNext() {
     // await this.page.waitForNavigation({'waitUntil':'networkidle2'});
-    // await this.page.waitForSelector(this.nextSelector,{'waitUntil':'networkidle2'});
-    const nextBtn = await this.page.$(this.nextSelector);
-    this.hasNext = !!nextBtn;
+    // const nextBtn = await this.page.$(this.nextSelector);
+    try {
+      const nextBtn = await this.page.waitForSelector(this.nextSelector, { 'timeout': NEXT_GAP });
+      this.hasNext = !!nextBtn;
+    } catch (error) {
+      this.hasNext = false;
+    }
+
     if (!this.hasNext) console.log(`${this.nick} Page End`);
   }
 
@@ -156,11 +173,11 @@ class Site {
 
     let ws;
 
-    this.pageElements.forEach((elm,idx)=>{
+    this.pageElements.forEach((elm, idx) => {
 
-      if(!elm) return null;
+      if (!elm) return null;
 
-      ws = fs.createWriteStream(`${this.jsonPath}/${idx}.json`, { flags:'w', encoding: 'utf8' });
+      ws = fs.createWriteStream(`${this.jsonPath}/${idx}.json`, { flags: 'w', encoding: 'utf8' });
 
       ws.on('error', err => console.error(err.stack));
 
