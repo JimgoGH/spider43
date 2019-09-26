@@ -4,10 +4,16 @@ class Weixin_Sogou extends Site {
   url = 'https://weixin.sogou.com';
   nick = 'weixin.sogou.com';
   nextSelector = '#pagebar_container > a#sogou_next';
-  searchUrl = 'https://weixin.sogou.com/weixin?type=2&ie=utf8&query=##KEYWORD##&tsn=2&ft=&et=&interation=&wxid=&usip='
+  searchUrl = 'https://weixin.sogou.com/weixin?type=2&query=##KEYWORD##&ie=utf8&s_from=input'
 
   async doSearch(keyWord) {
-    return await this.directSearch(keyWord);
+    await this.directSearch(keyWord);
+    debugger
+    await this.page.click('#tool_show > a:nth-child(1)');
+    await this.page.waitFor(1000);
+    await this.page.click('a#time');
+    await this.page.waitFor(1000);
+    await this.page.click('div.time-box.float a.time-range:nth-child(4)');
   }
 
   async logElements() {

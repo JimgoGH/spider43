@@ -6,53 +6,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>采集目录</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/zui/1.9.1/css/zui.min.css">
+
   <style>
     #main {
-      display: flex;
-      justify-content: flex-start;
-    }
-
-    #app {
-      width: 400px;
+      padding: 20px 0;
     }
 
     #pageInfo {
-      width: 960px;
+      /* width: 960px; */
       min-height: 900px;
     }
 
-    .page-link {
+    .tree-menu li li a.page-link {
       display: inline-block;
-      margin: 0 .5em 0 0;
+      margin: 0;
+      padding: 0 0 0 .5em;
+      color: #6699ff;
     }
   </style>
 </head>
 
 <body>
-  <div id="main" class="row">
-    <div id="app" class="">
-      <!-- <date-directory></date-directory> -->
-      <ul>
-        <li v-for="dt in dateList" :key="dt.date">
-          <ul>
-            <p>{{dt.date}}</p>
-            <li v-for="st in dt.sites" :key="st.name">
-              <div>
+  <div class="container-fluid">
+    <div id="main" class="row">
+      <nav id="app" class="menu col-md-2" data-ride="menu">
+        <ul id="treeMenu" class="tree tree-menu" data-ride="tree">
+          <li v-for="dt in dateList" :key="dt.date">
+            <a href="#">{{dt.date}}</a>
+            <ul>
+              <li v-for="st in dt.sites" :key="st.name">
                 <span>{{st.name}} : </span>
-                <span class="page-link" v-for="p in st.pages" :key="p">
-                  <a :href="pageHref(dt.date,st.name,p)" target="pageInfo">{{p}}</a>
-                </span>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
+                <br>
+                <a class="page-link" v-for="p in st.pages" :key="p" :href="pageHref(dt.date,st.name,p)"
+                  target="pageInfo">{{p}}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <iframe id="pageInfo" name="pageInfo" class="col-md-10" frameborder="0"></iframe>
     </div>
-    <iframe id="pageInfo" name="pageInfo"></iframe>
   </div>
 </body>
 
 <script src="https://cdn.staticfile.org/vue/2.6.10/vue.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/zui/1.9.1/js/zui.min.js"></script>
 <script src="./getJSON.js"></script>
 <!-- 
 <script type="text/template" id="date_directory">

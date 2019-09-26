@@ -41,15 +41,26 @@
 <body>
   <div id="app">
     <template v-if="pageInfo">
-      <div id="main">
-
-        <img :src="'../'+pageInfo.img" onclick="showBigImg(this)">
-        <ul id="items">
-          <li v-for="it in pageInfo.items" :key="it.href">
-            <a class="title-link" :href="it.href" target="_blank">{{it.title}}</a>
-            <p>{{it.innerText}}</p>
-          </li>
-        </ul>
+      <div class="container-fluid">
+        <div id="app" class="row">
+          <div class="col-md-4">
+            <img :src="imgPath" data-toggle="lightbox" :data-image="imgPath" data-caption="小图看大图">
+          </div>
+          <div class="col-md-8">
+            <div class="list">
+              <div class="items items-hover">
+                <div class="item" v-for="it in pageInfo.items" :key="it.href">
+                  <div class="item-heading">
+                    <h4><a :href="it.href" target="_blank">{{it.title}}</a></h4>
+                  </div>
+                  <div class="item-content">
+                    <div class="text"> {{it.innerText}} </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
     <template v-else>
@@ -64,17 +75,16 @@
 <script src="https://cdn.staticfile.org/zui/1.9.1/js/zui.min.js"></script>
 
 <script src="./getJSON.js"></script>
-<script>
-  const showBigImg = img => {
-    console.log('Img', img.src);
-
-  } 
-</script>
 <script type="text/javascript">
   const APP = new Vue({
     el: '#app',
     data: {
       pageInfo: null,
+    },
+    computed: {
+      imgPath() {
+        return '../' + (this.pageInfo ? this.pageInfo.img : '');
+      }
     },
     async created() {
       const url = new URL(window.location);
@@ -92,6 +102,10 @@
       this.pageInfo = await getJson(`../jsons/${date}/${site}/${page}.json`);
 
       console.log('Page Info : ', this.pageInfo);
+      
+      this.$nextTick(function () {
+        $('[data-toggle="lightbox"]').lightbox();
+      })
     },
   });
 </script>
