@@ -7,6 +7,9 @@ class Toutiao_com extends Site {
   searchUrl = 'https://www.toutiao.com/search/?keyword=##KEYWORD##'
 
   async doSearch(keyWord) {
+    // It'll block if goto search url directly
+    await this.gotoIndex();
+
     await this.directSearch(keyWord);
 
     // scroll page for more info
@@ -21,23 +24,23 @@ class Toutiao_com extends Site {
         await waiteFor(3000);
       }
 
+      console.log('End Scrolling');
     });
   }
 
   async logElements() {
     console.log(`Log Elements ${this.nick} Page ${this.pageIndex}`);
 
-    const items = await this.page.$$eval('div.List  div.SearchResult-Card', elms => elms.map(elm => {
+    const items = await this.page.$$eval('div.sections  div.articleCard', elms => elms.map(elm => {
 
       console.log('Log www.zhihu.com Elements', elm);
       let log = {};
-      let content = elm.querySelector('div.RichContent-inner');
-      log.innerText = content.innerText;
-      let link = elm.querySelector('.ContentItem-title a');
+      // let content = elm.querySelector('div.RichContent-inner');
+      // log.innerText = content.innerText;
+      let link = elm.querySelector('div.title-box a.link.title');
       log.href = link.href;
       log.title = link.text;
       return log;
-
     }));
 
     // log page image

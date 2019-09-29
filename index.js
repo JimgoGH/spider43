@@ -9,9 +9,10 @@ const Sogou_Com = require("./sites/sogou.com.class");
 const Weixin_Sogou = require("./sites/weixin.sogou.com.class");
 const Zhihu_com = require("./sites/zhihu.com.class");
 const Weibo_com = require("./sites/weibo.com.class");
+const Toutiao_com = require("./sites/toutiao.com.class");
 const CONSTS = require('./consts.js');
 
-const siteClass = [Weibo_com];
+const siteClass = [Baidu_Com, Tieba_Baidu, Sogou_Com, Weixin_Sogou, Zhihu_com, Weibo_com, Toutiao_com];
 
 (async () => {
 

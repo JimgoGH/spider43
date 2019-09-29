@@ -8,7 +8,6 @@ class Weixin_Sogou extends Site {
 
   async doSearch(keyWord) {
     await this.directSearch(keyWord);
-    debugger
     await this.page.click('#tool_show > a:nth-child(1)');
     await this.page.waitFor(1000);
     await this.page.click('a#time');
