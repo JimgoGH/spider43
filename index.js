@@ -7,9 +7,11 @@ const Baidu_Com = require("./sites/baidu.com.class");
 const Tieba_Baidu = require("./sites/teiba.baidu.com.class");
 const Sogou_Com = require("./sites/sogou.com.class");
 const Weixin_Sogou = require("./sites/weixin.sogou.com.class");
+const Zhihu_com = require("./sites/zhihu.com.class");
+const Weibo_com = require("./sites/weibo.com.class");
 const CONSTS = require('./consts.js');
 
-const siteClass = [Weixin_Sogou];
+const siteClass = [Weibo_com];
 
 (async () => {
 
@@ -24,8 +26,8 @@ const siteClass = [Weixin_Sogou];
         await page.init();
 
         for (const kw of CONSTS.KEY_WORDS) {
-          await page.gotoIndex();
-          if (page.landFail) continue;
+          // await page.gotoIndex();
+          // if (page.landFail) continue;
 
           await page.doSearch(kw);
 
